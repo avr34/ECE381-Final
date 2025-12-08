@@ -44,5 +44,10 @@ RUN python3 setup_env.py -md models/BitNet-b1.58-2B-4T -q i2_s
 # Make local directory available in container
 COPY ./shared-data /data
 
+# TODO rearrange these commands once the project is done
+RUN apt install -y vim
+RUN pip install --no-cache-dir fastapi uvicorn
+COPY ./code /code
+
 # Finally, run bash
 CMD ["bash"]
