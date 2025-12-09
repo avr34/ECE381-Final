@@ -24,10 +24,13 @@ git clone https://github.com/avr33-boop/BitSearch.git
 ```
 
 Once it's cloned, you must build each of the docker images. To build BitNet, run the following commands:
+
 ```
 cd BitSearch/LLM
 docker build -t BitSearch/LLM .
 ```
+
+It's worth it to have a powerful *cpu* for this part, as compilation is a cpu-intensive task. The whole idea of using BitNet.cpp was to make this accessible to non-gpu users anyway. For reference: compilation on an NVIDIA Jetson Orin Nano took more than 2.5 hours, while on an i7-4790, 16 GB DDR3, HDD computer, it only took 1 hour.
 
 <!-- TODO: Add rest of the instructions -->
 
