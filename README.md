@@ -4,6 +4,8 @@
 
 ### Group Members: Arnav Revankar and Wilby Marcellus
 
+![In progress shield](https://img.shields.io/badge/STILL_IN_PROGRESS!!!-DA0AFF)
+
 -----
 
 <!-- Introduction -->
