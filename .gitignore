@@ -2,4 +2,7 @@
 *~
 
 # Temporary files
-tmp/
+tmp
+
+# Python cache
+__pycache__/
