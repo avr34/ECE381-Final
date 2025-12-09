@@ -105,5 +105,5 @@ if __name__=="__main__":
     # Handle input arguments
     handle_arguments()
 
-    uvicorn.run("runInference:app", host="0.0.0.0", port=8000, log_level="info", reload=True)
+    uvicorn.run("runInference:app", host="0.0.0.0", port=8080, log_level="info", reload=True)
 
