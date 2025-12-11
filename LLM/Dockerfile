@@ -1,18 +1,18 @@
 # Start from python 3.13-slim base image, and
 # set user to root
 FROM python:3.12-slim AS builder
+WORKDIR /
 USER root
 
 # Install required dependencies
 RUN apt update && apt install -y \
-    build-essential \
     git \
-    wget \
+    clang \
+    cmake \
     python3-dev \
     python3-pip \
     python3-venv \
-    clang \
-    cmake \
+    build-essential \
     && apt clean
 
 # Set environment variables (for cmake)
@@ -24,10 +24,15 @@ RUN git clone --recursive https://github.com/microsoft/BitNet.git && rm -rf /Bit
 WORKDIR /BitNet
 
 # Create venv, install dependencies, as well as huggingface cli
-RUN python3 -m venv .env
-ENV PATH="/BitNet/.env/bin/:$PATH"
+# RUN python3 -m venv .env
+# ENV PATH="/BitNet/.env/bin/:$PATH"
 RUN pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir -U "huggingface_hub[cli]"
+    pip install --no-cache-dir "huggingface_hub[cli]" && \
+    pip install --no-cache-dir \
+    typing \
+    fastapi \
+    uvicorn \
+    python-multipart
 
 # Use hf cli to download the bitnet 2B 4T weights, and
 # Call setup_env.py to compile BitNet.cpp
@@ -44,10 +49,18 @@ RUN python3 setup_env.py -md models/BitNet-b1.58-2B-4T -q i2_s
 # Make local directory available in container
 COPY ./shared-data /data
 
-# TODO rearrange these commands once the project is done
-RUN apt install -y vim
-RUN pip install --no-cache-dir fastapi uvicorn
-COPY ./code /code
+# Delete packages no longer required (used for building BitNet)
+RUN apt purge -y \
+    git \
+    clang \
+    cmake && \
+    apt autoremove -y
 
-# Finally, run bash
-CMD ["bash"]
+# Install some more pip packages (to avoid recompilation)
+RUN pip install --no-cache-dir \
+    requests
+
+# Finally, run the server
+WORKDIR /data/code
+ENTRYPOINT ["python3"]
+CMD ["./runBitNet.py", "/BitNet/models/BitNet-b1.58-2B-4T/ggml-model-i2_s.gguf", "8080"]
