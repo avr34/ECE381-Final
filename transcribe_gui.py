@@ -67,7 +67,7 @@ def run_bitnet_inference(file_path):
             messagebox.showerror("Error", "File is not transcribed for some reason")
             
         context = ' '.join(transcript_lines)
-        prompt = 'User: Can you please summarize the following: ' + context + '. Please summarize this. Assistant: '
+        prompt = 'User: The following is transcribed from a video. Can you please summarize what it is? ' + context + '. Please summarize this. Assistant: '
 
         payload = {
             "prompt": prompt,

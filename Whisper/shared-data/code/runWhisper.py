@@ -32,7 +32,7 @@ app = FastAPI(
 )
 
 async def get_http_client():
-    client = httpx.AsyncClient(timeout=30.0)
+    client = httpx.AsyncClient(timeout=3000.0)
     try:
         yield client
     finally:

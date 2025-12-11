@@ -47,7 +47,7 @@ def call_bitnet(prompt: TextPrompt):
         response = requests.post(
             server_url,
             json=payload,
-            timeout=30
+            timeout=3000
         )
 
         response.raise_for_status()
