@@ -15,12 +15,17 @@ BitSum is a *lecture summarizer* tool, built with [OpenAI Whisper][2] ([ggml-org
 
 BitSum is built with docker containers in mind (it was one of the project's requirements), and so even through it's designed to run on a CPU, *it is rather disk-heavy, taking up* ***15GB*** *on our test machines*. Please keep that in mind before proceeding.
 
-Installing BitSum takes 4 steps:
+Installing BitSum takes 5 steps:
 
-- Installing Docker (if not already installed)
-- Cloning this repository
-- Building the docker images
-- Running the docker containers
+- **Installing Docker** (if not already installed)
+- **Cloning this repository**
+- **Running Docker Containers**
+- **Installing Python Dependencies**
+- **Running the Program**
+
+#### Installing docker
+
+For the most up to date instructions, please visit [docker's website][6]
 
 #### Cloning the Repo
 
@@ -33,27 +38,44 @@ cd BitSum
 
 #### Building Docker Images
 
-Once it's cloned, you must build each of the docker images. To build BitNet, run the following commands:
+Once it's cloned, you must build the docker images. Thankfully, we have `docker compose` which makes that very simple.
 
 ```bash
-cd ./LLM
-bash ./build.bash
+docker compose up
 ```
 
-It's worth it to have a powerful *cpu* for this part, as compilation is a cpu-intensive task. The whole idea of using BitNet.cpp was to make this accessible to non-gpu users anyway. For reference: compilation on an NVIDIA Jetson Orin Nano took more than 2.5 hours (powerful GPU, weak CPU), while on an i7-4790, 16 GB DDR3, HDD computer, it only took 1 hour, and 20 minutes on an i5-6300U, 16 GB DDR4 computer with an SSD.
+It's worth it to have a powerful *cpu* for this part (compiling BitNet.cpp, binaries are not distributed), as compilation is a cpu-intensive task. The whole idea of using BitNet.cpp was to make this accessible to non-gpu users anyway. For reference: compilation on an NVIDIA Jetson Orin Nano took more than 2.5 hours (powerful GPU, weak CPU), while on an i7-4790, 16 GB DDR3, HDD computer, it only took 1 hour, and 20 minutes on an i5-6300U, 16 GB DDR4 computer with an SSD.
 
-Then, build Whisper, by running the commands shown below. This will be much faster as nothing is compiled, the base image conveniently comes with pre-compiled executables :smiley:[^2]
+Building the images for Whisper and Yolo should be much faster, but still expect no less than 30-40 minutes at least.
 
-```bash
-cd ../Whisper
-bash ./build.bash
+#### Installing the Python Dependencies
+
+For this part, a virtual environment is highly advised; it takes up more disk space, but guarantees that you won't break any of your other applications by upgrading to a new package version. To create the virual environment, make sure `python3-venv` is installed. Then run:
+
+```
+# Windows
+python3 -m venv .env
+cd .env/Scripts/
+activate.bat
+cd ../../
+
+# Linux/MacOS
+python3 -m venv .env
+source .env/bin/activate
 ```
 
-Finally, build YOLO. Again, this is quite fast.
+Then install dependencies:
 
 ```bash
-cd ../YOLO
-bash ./build.bash
+pip install -r requirements.txt
+```
+
+#### Running the Program
+
+Finally:
+
+```bash
+python3 ./transcribe_gui.py
 ```
 
 #### Misc
@@ -70,3 +92,4 @@ Also, in each project folder, there are `run.bash` and `test.bash` files, which 
 [3]: https://github.com/ggml-org/whisper.cpp
 [4]: https://github.com/microsoft/BitNet
 [5]: https://github.com/ultralytics/ultralytics
+[6]: https://www.docker.com/get-started/

@@ -10,4 +10,4 @@ if [[ ! "$OUTPUT" == *.mp4 ]]; then
 	echo "Appended .mp4 to $2"
 fi
 
-curl -X POST "http://localhost:8000/inference/" -F "file=@$1" -o "$OUTPUT"
+curl -X POST "http://localhost:80/inference/" -F "file=@$1" -o "$OUTPUT"

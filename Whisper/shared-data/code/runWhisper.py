@@ -18,6 +18,7 @@ server_run = [
     "-m", "/app/models/ggml-small.bin",
     "--host", "0.0.0.0",
     "--port", "8000",
+    "-t", "8",
     "--convert"
 ]
 

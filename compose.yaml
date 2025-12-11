@@ -1,0 +1,57 @@
+services:
+  Whisper:
+    image: whisper
+    build:
+      context: ./Whisper/
+      dockerfile: Dockerfile
+
+    ports:
+      - "8080:8080"
+
+    volumes:
+      - ./Whisper/shared-data/:/data
+
+    container_name: whisper
+
+    command:
+      - '/data/code/runWhisper.py'
+      - '/app/models/ggml-small.bin'
+      - '8080'
+
+  BitNet:
+    image: bitnet
+    build:
+      context: ./LLM/
+      dockerfile: Dockerfile
+
+    ports:
+      - "8000:8080"
+
+    volumes:
+      - ./LLM/shared-data/:/data
+
+    container_name: bitnet
+
+    command:
+      - '/data/code/runBitNet.py'
+      - '/BitNet/models/BitNet-b1.58-2B-4T/ggml-model-i2_s.gguf'
+      - '8080'
+
+  Yolo:
+    image: yolo
+    build:
+      context: ./YOLO/cpu
+      dockerfile: Dockerfile
+
+    ports:
+      - "80:8080"
+
+    volumes:
+      - ./YOLO/cpu/shared-data/:/data
+
+    container_name: yolo
+
+    command:
+      - '/data/code/runInference.py'
+      - '/weights/yolov8s.onnx'
+      - '8080'
